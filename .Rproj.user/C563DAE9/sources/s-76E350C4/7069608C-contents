@@ -1,0 +1,98 @@
+library(tidyverse)
+fricarino
+View(fricarino)
+str(fricarino)
+head(fricarino)
+fricarino
+tidyfric
+tidyfric <- fricarino %>%
+  mutate(., sGrav = s_cog, sSkew = s_skewness, 
+         shGrav = sh_cog, shSkew = sh_skewness)
+tidyfric <- fricarino %>%
+  rename(., sGrav = s_cog, sSkew = s_skewness, 
+         shGrav = sh_cog, shSkew = sh_skewness) %>%
+  select(., sGrav, sSkew, shGrav, shSkew)
+
+tidyfric <- fricarino %>%
+  rename(., sGrav = s_cog, sSkew = s_skewness, 
+         shGrav = sh_cog, shSkew = sh_skewness) %>%
+  select(., obs, sGrav, sSkew, shGrav, shSkew)
+
+
+mean(sGrav)
+mean(tidyfric$sGrav)
+
+library(dplyr)
+
+mean(sGrav)
+
+
+stopit <- function(x) format(x, digits = 4)
+
+stopit(mean(tidyfric$sGrav))
+
+
+stopit <- function(x) format(x, digits = 2, big.mark = ",")
+
+View(fricarino)
+
+tidyfric <- fricarino %>%
+  select(., s_cog, sh_cog) %>%
+  gather(., s_cog, sh_cog, key = SegGrav, value = GravValue) %>%
+  
+tidyfricB <- fricarino %>%
+  select(., s_skewness, sh_skewness) %>%
+  gather(., s_skewness, sh_skewness, key = SegSkew, value = SkewValue)
+
+
+tidyfric$SegSkew <- tidyfricB$SegSkew
+tidyfric$SkewValue <- tidyfricB$SkewValue
+
+ggplot(data = tidyfric, aes(x = SegGrav, y = GravValue)) +
+  geom_boxplot()
+
+
+fric_fit <- lm(s_cog ~ s_skewness, data = fricarino)
+summary(fric_fit)
+fric_fitm <- as.matrix(fric_fit)
+fric_fitdf <- as.data.frame(fric_fitm)
+
+knitr::kable(summary(fric_fitm))
+
+confint(fric_fit)
+
+mean(tidyfric$GravValue)
+
+residuals(fric_fit)
+
+mean(fric_fit$residuals)
+
+residuals(fric_fit)
+
+fitted(fric_fit)
+
+plot(fitted(fric_fit), residuals(fric_fit) 
+
+qqnorm(residuals(fric_fit))
+qqline(residuals(fric_fit))
+
+cooks.distance(fric_fit)
+
+plot(cooks.distance(fric_fit), main = "Cook's Distance", 
+     ylab = "Cook's Distance", xlab = "Observation Number")
+
+
+plot(fric_fit)
+
+try <- tidyfric %>%
+  select(., SegGrav == "s_cog")
+
+try <- fricarino %>%
+  select(., -obs) %>%
+  rename(., s = s_cog, sh = sh_cog) %>%
+  gather(., phoneme, cogval, -s_skewness, -sh_skewness) 
+
+try <- fricarino %>%
+  select(., -obs) %>%
+  rename(., s = s_cog, sh = sh_cog) %>%
+  gather(., phoneme, cogval, -s_skewness, -sh_skewness) 

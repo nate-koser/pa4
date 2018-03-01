@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Programming Assignment 4</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Nate Koser" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Programming Assignment 4
+### Nate Koser
+### Last Updated: 2018-03-01
+
+---
+
+
+
+# Hello Data
+Here I load the data set.
+
+
+
+
+```r
+fricarino &lt;- read_csv("../data_raw/fricatives.csv")
+```
+
+```r
+head(fricarino)
+```
+
+```
+## # A tibble: 6 x 5
+##     obs s_cog s_skewness sh_cog sh_skewness
+##   &lt;int&gt; &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;
+## 1     1  3285     -1.22    2409     -0.248 
+## 2     2  4664     -1.19    2823     -0.0165
+## 3     3  4680     -1.07    2898      0.118 
+## 4     4  4874     -1.06    3617      0.198 
+## 5     5  4879     -1.03    3668      0.212 
+## 6     6  5195     -0.949   3685      0.262
+```
+
+---
+
+#Tidy Data
+Here I tidy the data.
+
+
+```r
+tidyfric &lt;- fricarino %&gt;%
+  select(., s_cog, sh_cog) %&gt;%
+  gather(., s_cog, sh_cog, key = SegGrav, 
+         value = GravValue) 
+  
+tidyfricB &lt;- fricarino %&gt;%
+  select(., s_skewness, sh_skewness) %&gt;%
+  gather(., s_skewness, sh_skewness, key = SegSkew, 
+         value = SkewValue)
+
+
+tidyfric$SegSkew &lt;- tidyfricB$SegSkew
+tidyfric$SkewValue &lt;- tidyfricB$SkewValue
+```
+
+---
+
+#Tidy Data
+
+```r
+head(tidyfric, n = 10)
+```
+
+```
+## # A tibble: 10 x 4
+##    SegGrav GravValue SegSkew    SkewValue
+##    &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
+##  1 s_cog        3285 s_skewness    -1.22 
+##  2 s_cog        4664 s_skewness    -1.19 
+##  3 s_cog        4680 s_skewness    -1.07 
+##  4 s_cog        4874 s_skewness    -1.06 
+##  5 s_cog        4879 s_skewness    -1.03 
+##  6 s_cog        5195 s_skewness    -0.949
+##  7 s_cog        5455 s_skewness    -0.909
+##  8 s_cog        5484 s_skewness    -0.878
+##  9 s_cog        5684 s_skewness    -0.867
+## 10 s_cog        5830 s_skewness    -0.859
+```
+
+---
+
+#Descriptive Statistics
+Here I present some descriptive statistics.
+
+
+| Phoneme | Mean Gravity | Mean Skewness |
+| :-      | :-            | :-           |
+| s       | 5690.52 | -0.77 |
+| ʃ       | 3994.82 | 0.55 |
+ 
+&lt;br&gt;
+- The mean center of gravity measurement in Hz for [s] was 5690.52.
+- The mean skewness measurement in [s] was
+-0.77.
+- The mean center of gravity measurement in Hz for [ʃ] was 3994.82.
+- The mean skewness measurement for [ʃ] was 
+0.55.
+
+---
+
+#Center of Gravity by Phoneme
+
+![](index_files/figure-html/boxplot-1.png)&lt;!-- --&gt;
+
+---
+
+#Skewness by Phoneme
+
+![](index_files/figure-html/stattrans-1.png)&lt;!-- --&gt;
+
+---
+
+#Fit for Center of Gravity ~ [s] Skewness
+
+
+```
+## 
+## Call:
+## lm(formula = s_cog ~ s_skewness, data = fricarino)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1060.74   -21.72    58.96   123.00   405.24 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   8027.2      212.3   37.80  &lt; 2e-16 ***
+## s_skewness    3029.1      259.1   11.69 7.69e-10 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 320.1 on 18 degrees of freedom
+## Multiple R-squared:  0.8836,	Adjusted R-squared:  0.8771 
+## F-statistic: 136.6 on 1 and 18 DF,  p-value: 7.691e-10
+```
+---
+
+#In a Table
+
+
+|Residuals    |          |           |           |           |
+|:-           | :-       | :-        | :-        | :-        |
+| Min         | 1Q       | Median    | 3Q        | Max       |
+|-1060.74     | -21.72   | 58.96     | 123.00    | 405.24    |
+
+&lt;br&gt;
+
+|Coefficients |Estimate  | Std. Error| t-value   | p-value   |
+|:-           | :-       | :-        | :-        | :-        |
+|Intercept    |8027.2    | 212.3     | 37.80     | &lt; 0.001   |
+|[s] Skewness |3029.1    | 259.1     | 11.69     | &lt; 0.001   |
+
+
+---
+
+#Scatterplot of Model 
+![](index_files/figure-html/scatter-1.png)&lt;!-- --&gt;
+
+---
+
+#Check Model Diagnostics
+Confidence interval
+
+```
+##                2.5 %   97.5 %
+## (Intercept) 7581.141 8473.335
+## s_skewness  2484.674 3573.532
+```
+Mean of residuals is zero
+
+```
+## [1] 1.136591e-14
+```
+Pearson's correlation coefficient 
+
+```
+## [1] 0.9399988
+```
+
+---
+
+#Check Model Diagnostics
+Check heteroskedasticity 
+
+![](index_files/figure-html/skedast-1.png)&lt;!-- --&gt;
+
+---
+
+#Check Model Diagnostics
+Check distribution 
+
+![](index_files/figure-html/qqline-1.png)&lt;!-- --&gt;
+
+---
+
+#Check Model Diagnostics
+
+Check influential data points with Cook's distance
+
+![](index_files/figure-html/cooks-1.png)&lt;!-- --&gt;
+
+---
+
+#Discussion of Results
+
+The model evaluates the hypothesized bivariate relationship between center of gravity and skewness among [s] segements. The model diagnostics indicate a strong correlation between the two variables. 
+
+A check of the confidence interval reveals a 95% probability of the center of gravity intercept being between 7581.14 ~ 8473.33, which our estimated value of 8027.20 falls within. The same is true for the slope of [s] skewness, where we see an interval of 2484.67 ~ 3573.53. The estimated value is again well within this range. These estimated
+values are determined to be significant at the p &lt; .0001 level, and our R-squared value 
+indicates that 87.71% of the variance is accounted for. 
+
+A glance at a scatterplot of the two variables suggests a strong positive correlation with relative normal distribution. Other model diagnostics support this observation. The mean of the residuals is effectively zero (1.13e-14) and the Pearson's correlation coefficient comes in at about .94, suggesting a close relationship. 
+
+---
+
+#Discussion of Results
+
+Plotting the residuals versus the fitted values shows that the data are homoskedastic, though one or two influential data points may be present. A Q-Q plot shows tight distribution around the mean other than the aforementioned outliers. A check of Cook's distance confirms the presence of two influential data points that may be affecting the shape of the model.   
+
+Despite the presence of outliers, every test of statistical significance examined so far indicates that there is a positive relationship between [s] center of gravity and [s] skewness - as one increases, so does the other. The null hypothesis can be rejected in favor of the alternative hypothesis. This is what the linear model tells us.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

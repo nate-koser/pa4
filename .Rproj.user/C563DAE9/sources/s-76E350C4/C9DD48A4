@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1519775721289.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C9DD48A4",
+    "lastKnownWriteTime" : 3833180308419998817,
+    "last_content_update" : 1519775721289,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "E457D3EA",
+        "caption" : "tidyfric",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=tidyfric&cache_key=E457D3EA",
+        "displayedObservations" : 40,
+        "environment" : "",
+        "object" : "tidyfric",
+        "preview" : 0,
+        "totalObservations" : 40,
+        "variables" : 4
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

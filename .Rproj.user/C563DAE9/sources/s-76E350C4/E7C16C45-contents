@@ -1,0 +1,60 @@
+---
+title: "Regression"
+author: "Chris Oakden"
+date: "Last Updated: `r Sys.Date()`"
+output: 
+  html_document: 
+    highlight: espresso
+    theme: yeti
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Regression Example (Section Header)
+
+This is a simple, bivariate regression example from `languageR`
+Two plus two equals `r 2+2`.
+
+```{r, my_setup, echo=TRUE, message = FALSE}
+library(tidyverse)
+library(languageR)
+```
+
+##Tidy some data
+Here we tidy the data.
+```{r, my_plot, fig.align="center", fig.width=7, fig.height=7}
+my_data <- spanish %>%
+  select(., x = X14475gll, y = X14458gll)%>%
+  filter(., x<.050, y<.050)
+
+  ggplot(my_data, aes(x=x,y=y))+
+  geom_point()+
+  geom_smooth(method = lm, fill = "green")
+```
+
+#Model
+Here we fit the model.
+```{r, my_model}
+my_fit <- lm(x ~ y, data = my_data)
+summary(my_fit)
+```
+The data were analyzed (CI, LB: `r round(confint(my_fit)[1,2],3)`). The R^2 value was very low
+
+##Coefficients
+Here are the coefficients of the model.
+```{r, my coefficients}
+coefficients(my_fit)
+```
+
+##Residuals
+Here are the residuals of the model. They appear to be heteroscedastic.
+```{r, fig.align="center"}
+plot(fitted(my_fit), residuals(my_fit))
+```
+Additionally, they are not normally distributed
+```{r, fig.align="center"}
+qqnorm(residuals(my_fit))
+qqline(residuals(my_fit))
+```
