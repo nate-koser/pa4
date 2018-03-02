@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1519944005980.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "BAE8BD86",
+    "lastKnownWriteTime" : 7308604914264011873,
+    "last_content_update" : 1519944005980,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "422A1DF8",
+        "caption" : "fricarino",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=fricarino&cache_key=422A1DF8",
+        "displayedObservations" : "20",
+        "environment" : "",
+        "object" : "fricarino",
+        "preview" : "0",
+        "totalObservations" : "20",
+        "variables" : "5"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

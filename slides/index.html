@@ -53,18 +53,22 @@ Here I tidy the data.
 
 ```r
 tidyfric &lt;- fricarino %&gt;%
-  select(., s_cog, sh_cog) %&gt;%
-  gather(., s_cog, sh_cog, key = SegGrav, 
-         value = GravValue) 
-  
-tidyfricB &lt;- fricarino %&gt;%
-  select(., s_skewness, sh_skewness) %&gt;%
-  gather(., s_skewness, sh_skewness, key = SegSkew, 
-         value = SkewValue)
+  select(., -obs) %&gt;%
+  gather(., key = 'phoneme', value = 'value', s_cog:sh_skewness) %&gt;%
+  separate(., col = 'phoneme', into = c('phoneme', 'obstype'), sep = '_') %&gt;%
+  filter(., obstype == "cog") %&gt;%
+  select(., phoneme, value) %&gt;%
+  rename(., cogval = value)
 
+skewtid &lt;- fricarino %&gt;%
+  select(., -obs) %&gt;%
+  gather(., key = 'phoneme', value = 'value', s_cog:sh_skewness) %&gt;%
+  separate(., col = 'phoneme', into = c('phoneme', 'obstype'), sep = '_') %&gt;%
+  filter(., obstype == "skewness") %&gt;%
+  select(., phoneme, value) %&gt;%
+  rename(., skewness = value)
 
-tidyfric$SegSkew &lt;- tidyfricB$SegSkew
-tidyfric$SkewValue &lt;- tidyfricB$SkewValue
+tidyfric$skewness &lt;- skewtid$skewness
 ```
 
 ---
@@ -76,19 +80,19 @@ head(tidyfric, n = 10)
 ```
 
 ```
-## # A tibble: 10 x 4
-##    SegGrav GravValue SegSkew    SkewValue
-##    &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
-##  1 s_cog        3285 s_skewness    -1.22 
-##  2 s_cog        4664 s_skewness    -1.19 
-##  3 s_cog        4680 s_skewness    -1.07 
-##  4 s_cog        4874 s_skewness    -1.06 
-##  5 s_cog        4879 s_skewness    -1.03 
-##  6 s_cog        5195 s_skewness    -0.949
-##  7 s_cog        5455 s_skewness    -0.909
-##  8 s_cog        5484 s_skewness    -0.878
-##  9 s_cog        5684 s_skewness    -0.867
-## 10 s_cog        5830 s_skewness    -0.859
+## # A tibble: 10 x 3
+##    phoneme cogval skewness
+##    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 s         3285   -1.22 
+##  2 s         4664   -1.19 
+##  3 s         4680   -1.07 
+##  4 s         4874   -1.06 
+##  5 s         4879   -1.03 
+##  6 s         5195   -0.949
+##  7 s         5455   -0.909
+##  8 s         5484   -0.878
+##  9 s         5684   -0.867
+## 10 s         5830   -0.859
 ```
 
 ---
@@ -104,11 +108,9 @@ Here I present some descriptive statistics.
  
 &lt;br&gt;
 - The mean center of gravity measurement in Hz for [s] was 5690.52.
-- The mean skewness measurement in [s] was
--0.77.
+- The mean skewness measurement in [s] was -0.77.
 - The mean center of gravity measurement in Hz for [ʃ] was 3994.82.
-- The mean skewness measurement for [ʃ] was 
-0.55.
+- The mean skewness measurement for [ʃ] was 0.55.
 
 ---
 
@@ -130,7 +132,7 @@ Here I present some descriptive statistics.
 ```
 ## 
 ## Call:
-## lm(formula = s_cog ~ s_skewness, data = fricarino)
+## lm(formula = cogval ~ skewness, data = s)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
@@ -139,7 +141,7 @@ Here I present some descriptive statistics.
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
 ## (Intercept)   8027.2      212.3   37.80  &lt; 2e-16 ***
-## s_skewness    3029.1      259.1   11.69 7.69e-10 ***
+## skewness      3029.1      259.1   11.69 7.69e-10 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -178,7 +180,7 @@ Confidence interval
 ```
 ##                2.5 %   97.5 %
 ## (Intercept) 7581.141 8473.335
-## s_skewness  2484.674 3573.532
+## skewness    2484.674 3573.532
 ```
 Mean of residuals is zero
 

@@ -92,7 +92,39 @@ try <- fricarino %>%
   rename(., s = s_cog, sh = sh_cog) %>%
   gather(., phoneme, cogval, -s_skewness, -sh_skewness) 
 
-try <- fricarino %>%
+tidyfric <- fricarino %>%
   select(., -obs) %>%
-  rename(., s = s_cog, sh = sh_cog) %>%
-  gather(., phoneme, cogval, -s_skewness, -sh_skewness) 
+  gather(., key = 'phoneme', value = 'value', s_cog:sh_skewness) %>%
+  separate(., col = 'phoneme', into = c('phoneme', 'obstype'), sep = '_') %>%
+  filter(., obstype == "cog") %>%
+  select(., phoneme, value) %>%
+  rename(., cogval = value)
+
+skewtid <- fricarino %>%
+  select(., -obs) %>%
+  gather(., key = 'phoneme', value = 'value', s_cog:sh_skewness) %>%
+  separate(., col = 'phoneme', into = c('phoneme', 'obstype'), sep = '_') %>%
+  filter(., obstype == "skewness") %>%
+  select(., phoneme, value) %>%
+  rename(., skewness = value)
+
+tidyfric$skewness <- skewtid$skewness
+
+
+s <- filter(tidyfric, phoneme == "s") 
+sh <- filter(tidyfric, phoneme == "sh")
+mean(eh$cogval)
+mean(eh$skewness)
+mean(yeh$cogval)
+mean(yeh$skewness)
+
+s_fit <- lm(cogval ~ skewness, data = s)
+summary(s_fit)
+
+
+cor(s$cogval, s$skewness)
+
+
+  cor(s$cogval, s$skewness)
+
+cor(s$cogval, s$skewness)  
